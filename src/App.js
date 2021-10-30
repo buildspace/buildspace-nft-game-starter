@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import twitterLogo from "./assets/twitter-logo.svg";
 import "./App.css";
 import SelectCharacter from "./Components/SelectCharacter";
+import Arena from "./Components/Arena";
 import { CONTRACT_ADDRESS, transformCharacterData } from "./constants";
 import MyEpicGame from "./utils/MyEpicGame.json";
 import { ethers } from "ethers";
+import LoadingIndicator from "./Components/LoadingIndicator";
 
 // Constants
 const TWITTER_HANDLE = "_buildspace";
@@ -16,6 +18,7 @@ const App = () => {
    */
   const [currentAccount, setCurrentAccount] = useState(null);
   const [characterNFT, setCharacterNFT] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   /*
    * Start by creating a new action that we will run on component load
    */
@@ -56,6 +59,10 @@ const App = () => {
 
   //render
   const renderContent = () => {
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }
+
     if (!currentAccount) {
       return (
         <div className="connect-wallet-container">
@@ -74,6 +81,10 @@ const App = () => {
       );
     } else if (currentAccount && !characterNFT) {
       return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+    } else if (currentAccount && characterNFT) {
+      return (
+        <Arena characterNFT={characterNFT} setCharacterNFT={setCharacterNFT} />
+      );
     }
   };
 
@@ -103,41 +114,44 @@ const App = () => {
    * This runs our function when the page loads.
    */
   useEffect(() => {
+    setIsLoading(true);
     checkIfWalletIsConnected();
   }, []);
 
   useEffect(() => {
-  /*
-   * The function we will call that interacts with out smart contract
-   */
-  const fetchNFTMetadata = async () => {
-    console.log('Checking for Character NFT on address:', currentAccount);
+    /*
+     * The function we will call that interacts with out smart contract
+     */
+    const fetchNFTMetadata = async () => {
+      console.log("Checking for Character NFT on address:", currentAccount);
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const gameContract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      MyEpicGame.abi,
-      signer
-    );
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const gameContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        MyEpicGame.abi,
+        signer
+      );
 
-    const txn = await gameContract.checkIfUserHasNFT();
-  if (txn.name) {
-    console.log('User has character NFT');
-    setCharacterNFT(transformCharacterData(txn));
-  } else {
-    console.log('No character NFT found');
-  }
-  };
+      const txn = await gameContract.checkIfUserHasNFT();
+      if (txn.name) {
+        console.log("User has character NFT");
+        setCharacterNFT(transformCharacterData(txn));
+      } else {
+        console.log("No character NFT found");
+      }
 
-  /*
-   * We only want to run this, if we have a connected wallet
-   */
-  if (currentAccount) {
-    console.log('CurrentAccount:', currentAccount);
-    fetchNFTMetadata();
-  }
-}, [currentAccount]);
+      setIsLoading(false);
+    };
+
+    /*
+     * We only want to run this, if we have a connected wallet
+     */
+    if (currentAccount) {
+      console.log("CurrentAccount:", currentAccount);
+      fetchNFTMetadata();
+    }
+  }, [currentAccount]);
 
   return (
     <div className="App">
