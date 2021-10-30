@@ -15,6 +15,7 @@ const NFT_MINT_LINK = 'https://nft-starter-repo-final.richardbankole.repl.co'
 
 const App = () => {
 
+  // eslint-disable-next-line no-unused-vars
   const [currentAccount, setCurrentAccount] = useState(null);
 
   const checkIfWalletIsConnected = async () => {
