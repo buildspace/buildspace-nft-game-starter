@@ -69,6 +69,7 @@
   );
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
+  margin-bottom: 20px;
 }
 
 .mint-button {
@@ -93,14 +94,43 @@
   justify-content: center;
   align-items: center;
   padding-bottom: 30px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer-container div {
+  margin: 20px 20px;
+}
+
+.footer-container-nft {
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-container-twit {
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  /* padding-bottom: 20px; */
 }
 
 .twitter-logo {
   width: 35px;
   height: 35px;
+  margin: 3px;
 }
 
-.footer-text {
+.footer-logo {
+  margin: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+#CMElogo {
+  margin:3px;
+}
+
+.footer-text, .footer-text-twit {
   color: white;
   font-size: 16px;
   font-weight: bold;
