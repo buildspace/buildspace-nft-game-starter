@@ -3,13 +3,11 @@ import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS, transformCharacterData } from '../../constants';
 import cryptoBoondocks from '../../utils/CryptoBoondocks.json';
 import LoadingIndicator from '../LoadingIndicator';
-import ipfs from "../../App";
 import './Arena.css';
-import { render } from '@testing-library/react';
 
-const Arena = ({ characterNFT, setCharacterNFT }) => {
-    const [gameContract, setGameContract] = useState(null);
-    const [boss, setBoss] = useState(null);
+const Arena = ({ characterNFT, setCharacterNFT }: any) => {
+    const [gameContract, setGameContract] = useState<any | null>(null);
+    const [boss, setBoss] = useState<any | null>(null);
     const [attackState, setAttackState] = useState('');
     const [lastAttack, setLastAttack] = useState('');
     const [showToast, setShowToast] = useState(false);
@@ -47,7 +45,7 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
     }
 
     useEffect(() => {
-        const { ethereum } = window;
+        const { ethereum } = window as any;
 
         if (ethereum) {
             const provider = new ethers.providers.Web3Provider(ethereum);
@@ -66,12 +64,14 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
 
     useEffect(() => {
         const fetchBoss = async () => {
+            if (gameContract) {
             const bossTxn = await gameContract.getBigBoss();
             console.log('Boss:', bossTxn);
             setBoss(transformCharacterData(bossTxn, false));
-        };
+        }
+    };
 
-        const onAttackComplete = (newBossHp, newPlayerHp, critical, selfDmg, shield, finalDmg) => {
+        const onAttackComplete = (newBossHp: any, newPlayerHp: any, critical: any, selfDmg: any, shield: any, finalDmg: any) => {
             const bossHp = newBossHp.toNumber();
             const playerHp = newPlayerHp.toNumber();
             const attackType =
@@ -91,11 +91,11 @@ const Arena = ({ characterNFT, setCharacterNFT }) => {
                 console.log('Shield activated - no player damage taken.')
             }
 
-            setBoss((prevState) => {
+            setBoss((prevState: any | null) => {
                 return { ...prevState, hp: bossHp };
             })
 
-            setCharacterNFT((prevState) => {
+            setCharacterNFT((prevState: any | null) => {
                 return { ...prevState, hp: playerHp, lastAttack: finalDmgValue };
             })
 

@@ -6,18 +6,18 @@ import cryptoBoondocks from '../../utils/CryptoBoondocks.json'
 import LoadingIndicator from '../LoadingIndicator';
 
 
-const ipfs = (cid) => {
+const ipfs = (cid: string) => {
     return `https://cloudflare-ipfs.com/ipfs/${cid}`
 };
 
 const loadingGif = ipfs('QmWpA8TPSBFmX5MxTvDwdN72n6qzR2xXQQeGSFiov5c27d');
 
-const SelectCharacter = ({ setCharacterNFT }) => {
+const SelectCharacter = ({ setCharacterNFT }: null | any) => {
     const [characters, setCharacters] = useState([]);
-    const [gameContract, setGameContract] = useState(null);
+    const [gameContract, setGameContract] = useState<any | null>(null);
     const [mintingCharacter, setMintingCharacter] = useState(false);
 
-    const mintCharacterNFTAction = (characterId) => async () => {
+    const mintCharacterNFTAction = (characterId: number) => async () => {
         try {
             if (gameContract) {
                 setMintingCharacter(true);
@@ -40,7 +40,7 @@ const SelectCharacter = ({ setCharacterNFT }) => {
     const renderCharacters = () => {
         console.log("Rendering character grid... %d choices", characters.length)
 
-        return characters.map((character, index) => (
+        return characters.map((character: any, index) => (
             <div className="character-item" key={character.name}>
                 <div className="name-container">
                     <p>{character.name}</p>
@@ -56,7 +56,7 @@ const SelectCharacter = ({ setCharacterNFT }) => {
     }
 
     useEffect(() => {
-        const { ethereum } = window;
+        const { ethereum } = window as any;
 
         if (ethereum) {
             const provider = new ethers.providers.Web3Provider(ethereum);
@@ -81,7 +81,7 @@ const SelectCharacter = ({ setCharacterNFT }) => {
                 const charactersTxn = await gameContract.getAllDefaultCharacters();
                 console.log('charactersTxn:', charactersTxn);
 
-                const characters = charactersTxn.map((characterData) => transformCharacterData(characterData));
+                const characters = charactersTxn.map((characterData: any) => transformCharacterData(characterData));
 
                 setCharacters(characters);
             } catch (error) {
@@ -89,7 +89,7 @@ const SelectCharacter = ({ setCharacterNFT }) => {
             }
         };
 
-        const onCharacterMint = async (sender, tokenId, characterIndex) => {
+        const onCharacterMint = async (sender: any, tokenId: any, characterIndex: any) => {
             console.log(
                 `CharacterNFTMinted - sender: ${sender} tokenId: ${tokenId.toNumber()} characterIndex: ${characterIndex.toNumber()}`
             );

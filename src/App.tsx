@@ -19,7 +19,7 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const OPENSEA_HANDLE = 'web3blackguy';
 const OPENSEA_LINK = `https://opensea.io/${OPENSEA_HANDLE}`;
 const NFT_MINT_LINK = 'https://nft-starter-repo-final.richardbankole.repl.co'
-const ipfs = (cid) => {
+const ipfs = (cid: string) => {
   return `https://cloudflare-ipfs.com/ipfs/${cid}`
 };
 
@@ -27,12 +27,12 @@ const App = () => {
 
   // eslint-disable-next-line no-unused-vars
   const [currentAccount, setCurrentAccount] = useState(null);
-  const [characterNFT, setCharacterNFT] = useState(null);
+  const [characterNFT, setCharacterNFT] = useState(null) as any;
   const [isLoading, setIsLoading] = useState(false)
 
   const checkIfWalletIsConnected = async () => {
     try {
-      const { ethereum } = window;
+      const { ethereum } = window as any;
 
       if (!ethereum) {
         console.log('Make sure you have MetaMask!');
@@ -87,7 +87,7 @@ const App = () => {
 
   const connectWalletAction = async () => {
     try {
-      const { ethereum } = window;
+      const { ethereum } = window as any;
 
       if (!ethereum) {
         alert('Get MetaMask!');
@@ -119,7 +119,7 @@ const App = () => {
     const fetchNFTMetadata = async () => {
       console.log('Checking for Character NFT on address:', currentAccount);
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider((window as any).ethereum);
       const signer = provider.getSigner();
       const gameContract = new ethers.Contract(
         CONTRACT_ADDRESS,
@@ -145,14 +145,22 @@ const App = () => {
     }
   }, [currentAccount]);
 
-  let to = []
+  type Company = {
+    name: string
+    start: number
+    end: number
+    buzzword?: string
+  }
+
+  let to: Company[] = []
+
   const getCompanyName = async () => {
     let name_data = await Axios.get("https://random-data-api.com/api/company/random_company");
-    let cName = name_data.data.business_name
+    let cName: string = name_data.data.business_name
     return cName;}
 
   const generateCompany = async () => {for (let i=0; i < 20; i++) {
-    function randInt(min, max) {
+    function randInt(min: number, max: number) {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1) + min)
@@ -166,12 +174,12 @@ const App = () => {
       endVal = 2021
     } 
     
-    let company = {name: cName, start: startVal.toString(), end: endVal.toString()}
+    let company: Company = {name: cName, start: startVal, end: endVal}
 
     to = [...to, company]
 }
 
-let failures = to.filter(company => (company.end - company.start <= 3))
+let failures = to.filter((company: Company) => (company.end - company.start <= 3))
     console.table(to)
     console.log("%c Failures:", "color: orange; font-weight:bold;", failures)
 
