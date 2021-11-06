@@ -5,7 +5,6 @@ import nftLogo from './assets/chaos.png';
 import cbTitleLogo from './assets/huey-gun-logo.png';
 import './App.css';
 import { ethers } from 'ethers';
-import Axios from 'axios';
 
 import cryptoBoondocks from './utils/CryptoBoondocks.json'
 import SelectCharacter from './Components/SelectCharacter';
