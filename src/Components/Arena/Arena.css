@@ -60,6 +60,7 @@
 .health-bar progress[value] {
   -webkit-appearance: none;
   appearance: none;
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
 }
