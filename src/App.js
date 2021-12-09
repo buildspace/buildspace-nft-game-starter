@@ -32,7 +32,6 @@ const App = () => {
 
         setIsLoading(false);
         return;
-        return;
       } else {
         console.log("We have the ethereum object", ethereum);
 
