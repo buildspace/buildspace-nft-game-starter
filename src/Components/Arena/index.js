@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { CONTRACT_ADDRESS } from "../../constants";
 import { transformCharacterData } from "../../utils/transformCharacterData";
-import LoadingIndicator from "./Components/LoadingIndicator";
+import LoadingIndicator from "../LoadingIndicator";
 
 import myEpicGame from "../../utils/MyEpicGame.json";
 import "./Arena.css";

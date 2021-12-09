@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { CONTRACT_ADDRESS } from "../../constants";
 import { transformCharacterData } from "../../utils/transformCharacterData";
 import myEpicGame from "../../utils/MyEpicGame.json";
-import LoadingIndicator from "./Components/LoadingIndicator";
+import LoadingIndicator from "../LoadingIndicator";
 
 const SelectCharacter = ({ setCharacterNFT }) => {
   const [characters, setCharacters] = useState([]);
