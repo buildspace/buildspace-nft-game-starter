@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import twitterLogo from './assets/twitter-logo.svg';
 import './App.css';
+import SelectCharacter from './Components/SelectCharacter';
 
 // Constants
 const TWITTER_HANDLE = '_buildspace';
@@ -8,6 +9,8 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
+  const [characterNFT, setCharacterNFT] = useState(null);
+  const [walletConnect, setWalletConnect] = useState(false);
 
   // Checkin if wallet is connected or not
   const checkIfWalletIsConnected = async() => {
@@ -37,10 +40,10 @@ const App = () => {
       if (accounts.length !== 0){
         const account = accounts[0];
         console.log("Found an authorized account: ", account);
+        setWalletConnect(true);
       }else{
         console.log("No authorized account found!");
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -64,6 +67,33 @@ const App = () => {
     }
   }
 
+  // Render Methods
+  const renderContent = () => {
+    // If wallet is connected
+    if (!currentAccount) {
+      const buttonText = walletConnect ? "Play" : "Connect Wallet To Play";
+      return (
+        <div className="connect-wallet-container">
+          <img
+            src="https://i.imgur.com/d4VT4dn.gif"
+            alt="Hora Hora Gif"
+          />
+          {/* Button that trigger wallet connect */}
+          <button
+            className="cta-button connect-wallet-button"
+            onClick={connectWallet}
+          >
+            {buttonText}
+          </button>
+        </div>
+      );
+    } 
+    // If wallet is connected but player has no character NFT
+    else if (currentAccount && !characterNFT) {
+      return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+    }
+  }
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);
@@ -74,19 +104,7 @@ const App = () => {
         <div className="header-container">
           <p className="header gradient-text">⚔️ Metaverse Sorcerers ⚔️</p>
           <p className="sub-text">Team up to protect the Metaverse from Cursed Spirits!</p>
-          <div className="connect-wallet-container">
-            <img
-              src="https://i.imgur.com/d4VT4dn.gif"
-              alt="Hora Hora Gif"
-            />
-            {/* Button that trigger wallet connect */}
-            <button
-              className="cta-button connect-wallet-button"
-              onClick={connectWallet}
-            >
-              Connect Wallet To Play
-            </button>
-          </div>
+          {renderContent()}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
